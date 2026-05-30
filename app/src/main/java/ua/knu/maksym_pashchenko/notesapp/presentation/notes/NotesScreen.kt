@@ -5,5 +5,5 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun NotesScreen() {
-    Text(text = "Notes screen")
+    Text(text = "Notes count: ${fakeNotes.size}")
 }
