@@ -15,7 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun NotesScreen() {
+fun NotesScreen(
+    onNoteClick: (Long) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,7 +40,7 @@ fun NotesScreen() {
                 NoteCard(
                     note = note,
                     onClick = { clickedNote ->
-                        Log.d("NotesScreen", "Clicked note id: ${clickedNote.id}")
+                        onNoteClick(clickedNote.id)
                     }
                 )
             }
