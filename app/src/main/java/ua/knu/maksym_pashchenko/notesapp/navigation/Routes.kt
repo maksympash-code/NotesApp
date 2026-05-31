@@ -10,15 +10,15 @@ object Routes {
     const val NOTE_DETAILS_ROUTE = "$NOTES_DETAILS/{$NOTE_ID_ARGUMENT}"
     const val NOTE_EDIT_ROUTE = "$NOTE_EDIT?$NOTE_ID_ARGUMENT={$NOTE_ID_ARGUMENT}"
 
-    fun noteDetails(noteId: Long? = null): String {
+    fun noteDetails(noteId: Long): String {
         return "$NOTES_DETAILS/${noteId}"
     }
 
     fun noteEdit(noteId: Long? = null): String {
         return if (noteId == null) {
-            "$NOTE_EDIT?$NOTE_ID_ARGUMENT=${noteId}"
-        } else {
             NOTE_EDIT
+        } else {
+            "$NOTE_EDIT?$NOTE_ID_ARGUMENT=$noteId"
         }
     }
 }
