@@ -1,5 +1,6 @@
 package ua.knu.maksym_pashchenko.notesapp.presentation.notes
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,7 +35,12 @@ fun NotesScreen() {
                 items = fakeNotes,
                 key = { note -> note.id }
             ) { note ->
-                NoteItem(note = note)
+                NoteCard(
+                    note = note,
+                    onClick = { clickedNote ->
+                        Log.d("NotesScreen", "Clicked note id: ${clickedNote.id}")
+                    }
+                )
             }
         }
     }
