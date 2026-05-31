@@ -13,9 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import ua.knu.maksym_pashchenko.notesapp.presentation.util.formatTimestamp
 
 @Composable
 fun NoteCard(
@@ -60,9 +58,4 @@ fun NoteCard(
             )
         }
     }
-}
-
-private fun formatTimestamp(timestamp: Long): String {
-    val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-    return formatter.format(Date(timestamp))
 }

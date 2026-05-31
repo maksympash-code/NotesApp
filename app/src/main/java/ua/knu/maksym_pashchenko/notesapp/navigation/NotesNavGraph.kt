@@ -41,6 +41,12 @@ fun NotesNavGraph() {
                     noteId = noteId,
                     onBack = {
                         navController.popBackStack()
+                    },
+                    onEditClick = { editNoteId ->
+                        navController.navigate(Routes.noteEdit(editNoteId))
+                    },
+                    onDeleteClick = { deleteNoteId ->
+                        navController.popBackStack()
                     }
                 )
             }
