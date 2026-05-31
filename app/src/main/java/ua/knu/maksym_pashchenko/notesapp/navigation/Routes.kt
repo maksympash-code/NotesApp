@@ -2,7 +2,7 @@ package ua.knu.maksym_pashchenko.notesapp.navigation
 
 object Routes {
     const val NOTES_LIST = "notes_list"
-    const val NOTE_DETAILS = "notes_details"
+    const val NOTE_DETAILS = "note_details"
     const val NOTE_EDIT = "note_edit"
 
     const val NOTE_ID_ARGUMENT = "noteId"
