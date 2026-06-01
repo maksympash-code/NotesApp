@@ -47,6 +47,9 @@ fun NotesNavGraph() {
                 },
                 onTestNoteClick = {
                     notesListViewModel.addTestNote()
+                },
+                onCreateNoteClick = {
+                    navController.navigate(Routes.noteEdit())
                 }
             )
         }
@@ -92,7 +95,10 @@ fun NotesNavGraph() {
                 ?.toLongOrNull()
 
             NoteEditScreen(
-                noteId = noteId
+                noteId = noteId,
+                onBack = {
+                    navController.popBackStack()
+                }
             )
         }
     }

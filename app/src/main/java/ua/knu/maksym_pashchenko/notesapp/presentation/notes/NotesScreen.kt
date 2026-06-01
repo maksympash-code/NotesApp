@@ -19,7 +19,8 @@ import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
 fun NotesScreen(
     notes: List<Note>,
     onNoteClick: (Long) -> Unit,
-    onTestNoteClick: () -> Unit
+    onTestNoteClick: () -> Unit,
+    onCreateNoteClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -36,6 +37,13 @@ fun NotesScreen(
             modifier = Modifier.padding(top = 12.dp)
         ) {
             Text("Add test note")
+        }
+
+        Button(
+            onClick = onCreateNoteClick,
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            Text("Create note")
         }
 
         LazyColumn(
