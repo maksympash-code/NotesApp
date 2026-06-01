@@ -15,8 +15,33 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ua.knu.maksym_pashchenko.notesapp.presentation.notes.fakeNotes
+import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
 import ua.knu.maksym_pashchenko.notesapp.presentation.util.formatTimestamp
+
+
+val fakeNotes = listOf<Note>(
+    Note(
+        id = 1L,
+        title = "Перша нотатка",
+        content = "Це тестовий текст першої нотатки.",
+        createdAt = 1710000000000L,
+        updatedAt = 1710000000000L
+    ),
+    Note(
+        id = 2L,
+        title = "План на день",
+        content = "Створити модель Note, fake-дані та підготувати UI для списку.",
+        createdAt = 1710003600000L,
+        updatedAt = 1710003600000L
+    ),
+    Note(
+        id = 3L,
+        title = "Ідеї для NotesApp",
+        content = "Пошук, сортування, редагування, видалення, Room, Navigation Compose.",
+        createdAt = 1710007200000L,
+        updatedAt = 1710007200000L
+    ),
+)
 
 @Composable
 fun NoteDetailsScreen(
