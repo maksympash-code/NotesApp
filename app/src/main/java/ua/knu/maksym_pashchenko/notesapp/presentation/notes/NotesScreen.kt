@@ -1,6 +1,5 @@
 package ua.knu.maksym_pashchenko.notesapp.presentation.notes
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,15 +7,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
 
 @Composable
 fun NotesScreen(
-    onNoteClick: (Long) -> Unit
+    notes: List<Note>,
+    onNoteClick: (Long) -> Unit,
+    onTestNoteClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -28,13 +31,20 @@ fun NotesScreen(
             style = MaterialTheme.typography.headlineMedium
         )
 
+        Button(
+            onClick = onTestNoteClick,
+            modifier = Modifier.padding(top = 12.dp)
+        ) {
+            Text("Add test note")
+        }
+
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(top = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(
-                items = fakeNotes,
+                items = notes,
                 key = { note -> note.id }
             ) { note ->
                 NoteCard(
