@@ -14,6 +14,8 @@ import ua.knu.maksym_pashchenko.notesapp.data.local.database.NotesDatabase
 import ua.knu.maksym_pashchenko.notesapp.data.repository.NotesRepositoryImpl
 import ua.knu.maksym_pashchenko.notesapp.presentation.details.NoteDetailsScreen
 import ua.knu.maksym_pashchenko.notesapp.presentation.edit.NoteEditScreen
+import ua.knu.maksym_pashchenko.notesapp.presentation.edit.NoteEditViewModel
+import ua.knu.maksym_pashchenko.notesapp.presentation.edit.NoteEditViewModelFactory
 import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesListViewModel
 import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesListViewModelFactory
 import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesScreen
@@ -94,8 +96,24 @@ fun NotesNavGraph() {
                 ?.getString(Routes.NOTE_ID_ARGUMENT)
                 ?.toLongOrNull()
 
+            val noteEditViewModel: NoteEditViewModel = viewModel(
+                factory = NoteEditViewModelFactory(repository)
+            )
+
+            val uiState = noteEditViewModel.uiState.collectAsStateWithLifecycle()
+
             NoteEditScreen(
                 noteId = noteId,
+                uiState = uiState.value,
+                onTitleChange = noteEditViewModel::onTitleChange,
+                onContentChange = noteEditViewModel::onContentChange,
+                onSaveClick = {
+                    noteEditViewModel.saveNote(
+                        onSaved = {
+                            navController.popBackStack()
+                        }
+                    )
+                },
                 onBack = {
                     navController.popBackStack()
                 }

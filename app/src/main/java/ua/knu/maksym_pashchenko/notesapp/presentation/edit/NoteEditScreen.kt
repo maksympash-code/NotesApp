@@ -24,18 +24,16 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun NoteEditScreen(
     noteId: Long?,
+    uiState: NoteEditUiState,
+    onTitleChange: (String) -> Unit,
+    onContentChange: (String) -> Unit,
+    onSaveClick: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var title by rememberSaveable {
-        mutableStateOf("")
-    }
+    val isCreatedMode = noteId == null
 
-    var content by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    val screenTitle = if (noteId == null) {
+    val screenTitle = if (isCreatedMode) {
         "Create note"
     } else {
         "Edit note"
@@ -61,28 +59,30 @@ fun NoteEditScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
-            value = title,
-            onValueChange = { newTittle ->
-                title = newTittle
-                },
+            value = uiState.title,
+            onValueChange = onTitleChange,
             label = {
                 Text(text = "Title")
                 },
             singleLine = true,
+            isError = uiState.titleError,
+            supportingText = {
+                if (uiState.titleError){
+                    Text(text = "Title cannot be empty")
+                }
+            },
             modifier = Modifier.fillMaxWidth()
             )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = content,
-            onValueChange = { newContent ->
-                content = newContent
-                },
+            value = uiState.content,
+            onValueChange = onContentChange,
             label = {
                 Text(text = "Content")
                 },
-            maxLines = 8,
+            minLines = 8,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -95,11 +95,14 @@ fun NoteEditScreen(
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = {
-                // Save logic will be added later
-                }
+                onClick = onSaveClick,
+                enabled = isCreatedMode &&
+                uiState.title.isNotBlank() &&
+                !uiState.isSaving
                 ) {
-                    Text(text = "Save")
+                    Text(text = if (uiState.isSaving) "Saving ..."
+                        else "Save"
+                    )
                 }
             }
         }
