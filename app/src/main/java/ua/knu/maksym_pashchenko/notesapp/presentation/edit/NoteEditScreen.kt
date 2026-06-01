@@ -27,87 +27,80 @@ fun NoteEditScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var title by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var content by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    val screenTitle = if (noteId == null) {
+        "Create note"
+    } else {
+        "Edit note"
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        var title by rememberSaveable {
-            mutableStateOf("")
-        }
-
-        var content by rememberSaveable {
-            mutableStateOf("")
-        }
-
-        val screenTitle = if (noteId == null) {
-            "Create note"
-        } else {
-            "Edit note"
-        }
-
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(16.dp)
+        TextButton(
+            onClick = onBack
         ) {
-            TextButton(
-                onClick = onBack
-            ) {
-                Text("Back")
-            }
+            Text("Back")
+        }
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = screenTitle,
-                style = MaterialTheme.typography.headlineMedium
+        Text(
+            text = screenTitle,
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        OutlinedTextField(
+            value = title,
+            onValueChange = { newTittle ->
+                title = newTittle
+                },
+            label = {
+                Text(text = "Title")
+                },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
-                value = title,
-                onValueChange = { newTittle ->
-                    title = newTittle
+        OutlinedTextField(
+            value = content,
+            onValueChange = { newContent ->
+                content = newContent
                 },
-                label = {
-                    Text(text = "Title")
+            label = {
+                Text(text = "Content")
                 },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
+            maxLines = 8,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
-            OutlinedTextField(
-                value = content,
-                onValueChange = { newContent ->
-                    content = newContent
-                },
-                label = {
-                    Text(text = "Content")
-                },
-                maxLines = 8,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Button(
-                    onClick = {
-                        // Save logic will be added later
-                    }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Button(
+                onClick = {
+                // Save logic will be added later
+                }
                 ) {
                     Text(text = "Save")
                 }
             }
         }
     }
-}
