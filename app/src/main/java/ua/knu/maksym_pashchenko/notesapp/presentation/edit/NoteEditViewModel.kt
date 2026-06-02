@@ -39,8 +39,8 @@ class NoteEditViewModel(
     ) {
         val currentState = _uiState.value
 
-        val title = currentState.title
-        val content = currentState.content
+        val title = currentState.title.trim()
+        val content = currentState.content.trim()
 
         if (title.isBlank()) {
             _uiState.update { state ->

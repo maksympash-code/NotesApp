@@ -1,7 +1,5 @@
 package ua.knu.maksym_pashchenko.notesapp.presentation.edit
 
-import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesListViewModel
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import ua.knu.maksym_pashchenko.notesapp.domain.repository.NotesRepository
