@@ -5,7 +5,7 @@ data class NoteEditUiState(
     val content: String = "",
     val isSaving: Boolean = false,
     val titleTouched: Boolean = false,
-    val contentTouched: Boolean = false
+    val contentTouched: Boolean = false,
 ) {
     val isTitleValid: Boolean
         get() = title.isNotBlank()
@@ -13,7 +13,7 @@ data class NoteEditUiState(
     val showTitleError: Boolean
         get() = titleTouched && title.isBlank()
 
-    val showContextWarning: Boolean
+    val showContentWarning: Boolean
         get() = contentTouched && content.isBlank()
 
     val canSave: Boolean

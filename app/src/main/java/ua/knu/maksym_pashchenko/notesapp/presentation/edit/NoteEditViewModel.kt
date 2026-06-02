@@ -11,7 +11,7 @@ import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
 import ua.knu.maksym_pashchenko.notesapp.domain.repository.NotesRepository
 
 class NoteEditViewModel(
-    private val repository: NotesRepository
+    private val repository: NotesRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NoteEditUiState())
@@ -36,7 +36,7 @@ class NoteEditViewModel(
     }
 
     fun saveNote(
-        onSaved: () -> Unit
+        onSaved: () -> Unit,
     ) {
         val currentState = _uiState.value
 

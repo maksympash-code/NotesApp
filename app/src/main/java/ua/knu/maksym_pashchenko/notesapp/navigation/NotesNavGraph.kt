@@ -31,7 +31,7 @@ fun NotesNavGraph() {
         NotesRepositoryImpl(database.noteDao())
     }
 
-    NavHost (
+    NavHost(
         navController = navController,
         startDestination = Routes.NOTES_LIST
     ) {

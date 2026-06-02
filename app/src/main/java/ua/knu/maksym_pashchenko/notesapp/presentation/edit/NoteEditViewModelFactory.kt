@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import ua.knu.maksym_pashchenko.notesapp.domain.repository.NotesRepository
 
 class NoteEditViewModelFactory(
-    private val repository: NotesRepository
+    private val repository: NotesRepository,
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")

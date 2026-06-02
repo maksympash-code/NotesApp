@@ -25,11 +25,11 @@ fun NoteEditScreen(
     onContentChange: (String) -> Unit,
     onSaveClick: () -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val isCreatedMode = noteId == null
+    val isCreateMode = noteId == null
 
-    val screenTitle = if (isCreatedMode) {
+    val screenTitle = if (isCreateMode) {
         "Create note"
     } else {
         "Edit note"
@@ -59,16 +59,16 @@ fun NoteEditScreen(
             onValueChange = onTitleChange,
             label = {
                 Text(text = "Title")
-                },
+            },
             singleLine = true,
             isError = uiState.showTitleError,
             supportingText = {
-                if (uiState.showTitleError){
+                if (uiState.showTitleError) {
                     Text(text = "Title cannot be empty")
                 }
             },
             modifier = Modifier.fillMaxWidth()
-            )
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -77,10 +77,10 @@ fun NoteEditScreen(
             onValueChange = onContentChange,
             label = {
                 Text(text = "Content")
-                },
+            },
             minLines = 8,
             supportingText = {
-                if (uiState.showContextWarning) {
+                if (uiState.showContentWarning) {
                     Text(text = "Content is empty. The note will contain only a title.")
                 }
             },
@@ -97,12 +97,13 @@ fun NoteEditScreen(
         ) {
             Button(
                 onClick = onSaveClick,
-                enabled = isCreatedMode && uiState.canSave
-                ) {
-                    Text(text = if (uiState.isSaving) "Saving ..."
-                        else "Save"
-                    )
-                }
+                enabled = isCreateMode && uiState.canSave
+            ) {
+                Text(
+                    text = if (uiState.isSaving) "Saving ..."
+                    else "Save"
+                )
             }
         }
     }
+}
