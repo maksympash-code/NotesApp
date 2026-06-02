@@ -24,7 +24,7 @@ class NoteEditViewModel(
     private var initializedNoteId: Long? = null
 
     fun loadNote(noteId: Long?) {
-        if (initialized && initializedNoteId == null) {
+        if (initialized && initializedNoteId == noteId) {
             return
         }
 

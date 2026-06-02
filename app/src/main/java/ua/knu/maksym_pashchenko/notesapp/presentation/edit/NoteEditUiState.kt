@@ -18,5 +18,5 @@ data class NoteEditUiState(
         get() = contentTouched && content.isBlank()
 
     val canSave: Boolean
-        get() = isTitleValid && !isSaving
+        get() = isTitleValid && !isSaving && !isLoading
 }
