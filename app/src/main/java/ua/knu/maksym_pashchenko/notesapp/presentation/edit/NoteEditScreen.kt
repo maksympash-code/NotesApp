@@ -52,11 +52,21 @@ fun NoteEditScreen(
             style = MaterialTheme.typography.headlineMedium
         )
 
+        if (uiState.isLoading) {
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "Loading note ...",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
             value = uiState.title,
             onValueChange = onTitleChange,
+            enabled = !uiState.isLoading && !uiState.isSaving,
             label = {
                 Text(text = "Title")
             },
@@ -75,6 +85,7 @@ fun NoteEditScreen(
         OutlinedTextField(
             value = uiState.content,
             onValueChange = onContentChange,
+            enabled = !uiState.isLoading && !uiState.isSaving,
             label = {
                 Text(text = "Content")
             },
@@ -97,7 +108,7 @@ fun NoteEditScreen(
         ) {
             Button(
                 onClick = onSaveClick,
-                enabled = isCreateMode && uiState.canSave
+                enabled = uiState.canSave
             ) {
                 Text(
                     text = if (uiState.isSaving) "Saving ..."

@@ -1,6 +1,7 @@
 package ua.knu.maksym_pashchenko.notesapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -99,6 +100,10 @@ fun NotesNavGraph() {
             val noteEditViewModel: NoteEditViewModel = viewModel(
                 factory = NoteEditViewModelFactory(repository)
             )
+
+            LaunchedEffect (noteId) {
+                noteEditViewModel.loadNote(noteId)
+            }
 
             val uiState = noteEditViewModel.uiState.collectAsStateWithLifecycle()
 

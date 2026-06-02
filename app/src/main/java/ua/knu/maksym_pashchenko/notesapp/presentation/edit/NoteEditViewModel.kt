@@ -17,6 +17,65 @@ class NoteEditViewModel(
     private val _uiState = MutableStateFlow(NoteEditUiState())
     val uiState: StateFlow<NoteEditUiState> = _uiState.asStateFlow()
 
+    private var currentNoteId: Long? = null
+    private var currentCreatedAt: Long? = null
+
+    private var initialized = false
+    private var initializedNoteId: Long? = null
+
+    fun loadNote(noteId: Long?) {
+        if (initialized && initializedNoteId == null) {
+            return
+        }
+
+        initialized = true
+        initializedNoteId = noteId
+
+        if (noteId == null) {
+            currentNoteId = null
+            currentCreatedAt = null
+            _uiState.update {
+                NoteEditUiState()
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            _uiState.update { state ->
+                state.copy(isLoading = true)
+            }
+
+            val note = repository.getNoteById(noteId)
+
+            if (note == null) {
+                currentNoteId = null
+                currentCreatedAt = null
+
+                _uiState.update { state ->
+                    state.copy(
+                        isLoading = false,
+                        titleTouched = true
+                    )
+                }
+                return@launch
+            }
+
+            currentNoteId = note.id
+            currentCreatedAt = note.createdAt
+
+            _uiState.update {
+                NoteEditUiState(
+                    title = note.title,
+                    content = note.content,
+                    isSaving = false,
+                    isLoading = false,
+                    titleTouched = false,
+                    contentTouched = false
+                )
+            }
+        }
+    }
+
     fun onTitleChange(newTitle: String) {
         _uiState.update { currentState ->
             currentState.copy(
@@ -57,15 +116,29 @@ class NoteEditViewModel(
 
             val currentTime = System.currentTimeMillis()
 
-            repository.insertNote(
-                Note(
-                    id = 0L,
-                    title = title,
-                    content = content,
-                    createdAt = currentTime,
-                    updatedAt = currentTime
+            val noteId = currentNoteId
+
+            if (noteId == null) {
+                repository.insertNote(
+                    Note(
+                        id = 0L,
+                        title = title,
+                        content = content,
+                        createdAt = currentTime,
+                        updatedAt = currentTime
+                    )
                 )
-            )
+            } else {
+                repository.updateNote(
+                    Note(
+                        id = noteId,
+                        title = title,
+                        content = content,
+                        createdAt = currentCreatedAt ?: currentTime,
+                        updatedAt = currentTime
+                    )
+                )
+            }
 
             _uiState.update { state ->
                 state.copy(isSaving = false)

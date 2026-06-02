@@ -4,6 +4,7 @@ data class NoteEditUiState(
     val title: String = "",
     val content: String = "",
     val isSaving: Boolean = false,
+    val isLoading: Boolean = false,
     val titleTouched: Boolean = false,
     val contentTouched: Boolean = false,
 ) {
