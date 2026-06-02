@@ -14,6 +14,8 @@ import androidx.navigation.navArgument
 import ua.knu.maksym_pashchenko.notesapp.data.local.database.NotesDatabase
 import ua.knu.maksym_pashchenko.notesapp.data.repository.NotesRepositoryImpl
 import ua.knu.maksym_pashchenko.notesapp.presentation.details.NoteDetailsScreen
+import ua.knu.maksym_pashchenko.notesapp.presentation.details.NoteDetailsViewModel
+import ua.knu.maksym_pashchenko.notesapp.presentation.details.NoteDetailsViewModelFactory
 import ua.knu.maksym_pashchenko.notesapp.presentation.edit.NoteEditScreen
 import ua.knu.maksym_pashchenko.notesapp.presentation.edit.NoteEditViewModel
 import ua.knu.maksym_pashchenko.notesapp.presentation.edit.NoteEditViewModelFactory
@@ -68,16 +70,31 @@ fun NotesNavGraph() {
             val noteId = backStackEntry.arguments?.getLong(Routes.NOTE_ID_ARGUMENT)
 
             if (noteId != null) {
+
+                val noteDetailsViewModel: NoteDetailsViewModel = viewModel(
+                    factory = NoteDetailsViewModelFactory(repository)
+                )
+
+                LaunchedEffect(noteId) {
+                    noteDetailsViewModel.loadNote(noteId)
+                }
+
+                val uiState = noteDetailsViewModel.uiState.collectAsStateWithLifecycle()
+
                 NoteDetailsScreen(
-                    noteId = noteId,
+                    uiState = uiState.value,
                     onBack = {
                         navController.popBackStack()
                     },
                     onEditClick = { editNoteId ->
                         navController.navigate(Routes.noteEdit(editNoteId))
                     },
-                    onDeleteClick = {
-                        navController.popBackStack()
+                    onDeleteConfirm = {
+                        noteDetailsViewModel.deleteNote(
+                            onDeleted = {
+                                navController.popBackStack()
+                            }
+                        )
                     }
                 )
             }

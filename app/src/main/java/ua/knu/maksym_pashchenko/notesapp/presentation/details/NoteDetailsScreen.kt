@@ -8,58 +8,88 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
 import ua.knu.maksym_pashchenko.notesapp.presentation.util.formatTimestamp
-
-
-val fakeNotes = listOf<Note>(
-    Note(
-        id = 1L,
-        title = "Перша нотатка",
-        content = "Це тестовий текст першої нотатки.",
-        createdAt = 1710000000000L,
-        updatedAt = 1710000000000L
-    ),
-    Note(
-        id = 2L,
-        title = "План на день",
-        content = "Створити модель Note, fake-дані та підготувати UI для списку.",
-        createdAt = 1710003600000L,
-        updatedAt = 1710003600000L
-    ),
-    Note(
-        id = 3L,
-        title = "Ідеї для NotesApp",
-        content = "Пошук, сортування, редагування, видалення, Room, Navigation Compose.",
-        createdAt = 1710007200000L,
-        updatedAt = 1710007200000L
-    ),
-)
 
 @Composable
 fun NoteDetailsScreen(
-    noteId: Long,
+    uiState: NoteDetailsUiState,
     onBack: () -> Unit,
     onEditClick: (Long) -> Unit,
-    onDeleteClick: (Long) -> Unit,
+    onDeleteConfirm: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val note = fakeNotes.firstOrNull { it.id == noteId }
+    var showDeleteDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    val note = uiState.note
+
+    if (showDeleteDialog && note != null) {
+        AlertDialog(
+            onDismissRequest = {
+                showDeleteDialog = false
+            },
+            title = {
+                Text(text = "Delete note?")
+            },
+            text = {
+                Text(text = "Are you sure you want to delete \"${note.title}\"? This action cannot be undone.")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        onDeleteConfirm()
+                    }
+                ) {
+                    Text(text = "Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                    }
+                ) {
+                    Text(text = "Cancel")
+                }
+            }
+        )
+    }
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        TextButton(onClick = onBack) {
+        TextButton(
+            onClick = onBack,
+            enabled = !uiState.isDeleting
+        ) {
             Text(text = "Back")
+        }
+
+        if (uiState.isLoading) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Loading note ...",
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            return@Column
         }
 
         if (note == null) {
@@ -77,20 +107,26 @@ fun NoteDetailsScreen(
             TextButton(
                 onClick = {
                     onEditClick(note.id)
-                }
+                },
+                enabled = !uiState.isDeleting
             ) {
                 Text(text = "Edit")
             }
 
             TextButton(
                 onClick = {
-                    onDeleteClick(note.id)
+                    showDeleteDialog = true
                 },
+                enabled = !uiState.isDeleting,
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = MaterialTheme.colorScheme.error
                 )
             ) {
-                Text(text = "Delete")
+                Text(text = if (uiState.isDeleting){
+                    "Deleting ..."
+                } else {
+                    "Delete"
+                })
             }
         }
 
