@@ -21,7 +21,7 @@ class NoteEditViewModel(
         _uiState.update { currentState ->
             currentState.copy(
                 title = newTitle,
-                titleError = false
+                titleTouched = true
             )
         }
     }
@@ -29,7 +29,8 @@ class NoteEditViewModel(
     fun onContentChange(newContent: String) {
         _uiState.update { currentState ->
             currentState.copy(
-                content = newContent
+                content = newContent,
+                contentTouched = true
             )
         }
     }
@@ -44,7 +45,7 @@ class NoteEditViewModel(
 
         if (title.isBlank()) {
             _uiState.update { state ->
-                state.copy(titleError = true)
+                state.copy(titleTouched = true)
             }
             return
         }

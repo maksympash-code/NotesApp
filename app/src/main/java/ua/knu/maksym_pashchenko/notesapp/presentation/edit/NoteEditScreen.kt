@@ -61,9 +61,9 @@ fun NoteEditScreen(
                 Text(text = "Title")
                 },
             singleLine = true,
-            isError = uiState.titleError,
+            isError = uiState.showTitleError,
             supportingText = {
-                if (uiState.titleError){
+                if (uiState.showTitleError){
                     Text(text = "Title cannot be empty")
                 }
             },
@@ -79,6 +79,11 @@ fun NoteEditScreen(
                 Text(text = "Content")
                 },
             minLines = 8,
+            supportingText = {
+                if (uiState.showContextWarning) {
+                    Text(text = "Content is empty. The note will contain only a title.")
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -92,9 +97,7 @@ fun NoteEditScreen(
         ) {
             Button(
                 onClick = onSaveClick,
-                enabled = isCreatedMode &&
-                uiState.title.isNotBlank() &&
-                !uiState.isSaving
+                enabled = isCreatedMode && uiState.canSave
                 ) {
                     Text(text = if (uiState.isSaving) "Saving ..."
                         else "Save"
