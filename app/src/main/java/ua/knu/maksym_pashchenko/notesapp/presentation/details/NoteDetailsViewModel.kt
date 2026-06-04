@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
 import ua.knu.maksym_pashchenko.notesapp.domain.repository.NotesRepository
 
 class NoteDetailsViewModel(
@@ -42,16 +43,16 @@ class NoteDetailsViewModel(
     }
 
     fun deleteNote(
-        onDeleted: () -> Unit
+        onDeleted: (Note) -> Unit
     ) {
-        val noteId = _uiState.value.note?.id ?: return
+        val note = _uiState.value.note ?: return
 
         viewModelScope.launch {
             _uiState.update { state ->
                 state.copy(isDeleting = true)
             }
 
-            repository.deleteNoteById(noteId)
+            repository.deleteNoteById(note.id)
 
             _uiState.update { state ->
                 state.copy(
@@ -61,6 +62,6 @@ class NoteDetailsViewModel(
             }
         }
 
-        onDeleted()
+        onDeleted(note)
     }
 }
