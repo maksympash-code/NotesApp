@@ -19,7 +19,6 @@ import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
 fun NotesScreen(
     notes: List<Note>,
     onNoteClick: (Long) -> Unit,
-    onTestNoteClick: () -> Unit,
     onCreateNoteClick: () -> Unit
 ) {
     Column(
@@ -31,13 +30,6 @@ fun NotesScreen(
             text = "Notes",
             style = MaterialTheme.typography.headlineMedium
         )
-
-        Button(
-            onClick = onTestNoteClick,
-            modifier = Modifier.padding(top = 12.dp)
-        ) {
-            Text("Add test note")
-        }
 
         Button(
             onClick = onCreateNoteClick,

@@ -71,9 +71,6 @@ fun NotesNavGraph() {
                     onNoteClick = { noteId ->
                         navController.navigate(Routes.noteDetails(noteId))
                     },
-                    onTestNoteClick = {
-                        notesListViewModel.addTestNote()
-                    },
                     onCreateNoteClick = {
                         navController.navigate(Routes.noteEdit())
                     }
