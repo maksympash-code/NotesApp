@@ -60,8 +60,8 @@ class NoteDetailsViewModel(
                     isDeleting = false
                 )
             }
-        }
 
-        onDeleted(note)
+            onDeleted(note)
+        }
     }
 }

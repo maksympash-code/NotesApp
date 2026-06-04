@@ -36,7 +36,7 @@ import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesScreen
 fun NotesNavGraph() {
     val navController = rememberNavController()
 
-    val snackBarHostState = remember {
+    val snackbarHostState = remember {
         SnackbarHostState()
     }
 
@@ -51,7 +51,7 @@ fun NotesNavGraph() {
 
     Scaffold(
         snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState)
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { innerPadding ->
         NavHost(
@@ -116,7 +116,7 @@ fun NotesNavGraph() {
                                     navController.popBackStack()
 
                                     coroutineScope.launch {
-                                        val result = snackBarHostState.showSnackbar(
+                                        val result = snackbarHostState.showSnackbar(
                                             message = "Note deleted",
                                             actionLabel = "Undo",
                                             duration = SnackbarDuration.Long
