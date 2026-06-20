@@ -17,7 +17,7 @@ fun SortMenu(
     onSortTypeChanged: (NotesSortType) -> Unit
 ) {
     Text(
-        text = "Sort by date",
+        text = "Sort",
         style = MaterialTheme.typography.titleSmall,
         modifier = Modifier.padding(top = 12.dp)
     )
