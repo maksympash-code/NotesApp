@@ -98,8 +98,11 @@ fun NotesScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
+        }
 
+        Row(
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
             FilterChip(
                 selected = sortType == NotesSortType.TITLE_ASC,
                 onClick = {
