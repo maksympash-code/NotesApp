@@ -97,6 +97,34 @@ fun NotesScreen(
                     )
                 }
             )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            FilterChip(
+                selected = sortType == NotesSortType.TITLE_ASC,
+                onClick = {
+                    onSortTypeChanged(NotesSortType.TITLE_ASC)
+                },
+                label = {
+                    Text(
+                        text = "A -> Z"
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            FilterChip(
+                selected = sortType == NotesSortType.TITLE_DESC,
+                onClick = {
+                    onSortTypeChanged(NotesSortType.TITLE_DESC)
+                },
+                label = {
+                    Text(
+                        text = "Z -> A"
+                    )
+                }
+            )
         }
 
         LazyColumn(

@@ -57,8 +57,8 @@ class NotesListViewModel (
             }
 
             NotesSortType.TITLE_DESC -> {
-                filteredNotes.sortedBy { note ->
-                    note.title.uppercase()
+                filteredNotes.sortedByDescending { note ->
+                    note.title.lowercase()
                 }
             }
         }
