@@ -2,8 +2,11 @@ package ua.knu.maksym_pashchenko.notesapp.presentation.notes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
 import ua.knu.maksym_pashchenko.notesapp.domain.repository.NotesRepository
@@ -12,10 +15,30 @@ class NotesListViewModel (
     private val repository: NotesRepository
 ): ViewModel() {
 
-    val notes: StateFlow<List<Note>> = repository.getAllNotes()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = emptyList()
-        )
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    val notes: StateFlow<List<Note>> = combine(
+        repository.getAllNotes(),
+        _searchQuery
+    ) { notes, query ->
+        val trimmedQuery = query.trim()
+
+        if (trimmedQuery.isBlank()) {
+            notes
+        } else {
+            notes.filter { note ->
+                note.title.contains(trimmedQuery, ignoreCase = true) ||
+                        note.content.contains(trimmedQuery, ignoreCase = true)
+            }
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = emptyList()
+    )
+
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
+    }
 }
