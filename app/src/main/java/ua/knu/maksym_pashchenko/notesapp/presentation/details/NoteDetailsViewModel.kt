@@ -19,8 +19,11 @@ class NoteDetailsViewModel(
 
     private var loadedNoteId: Long? = null
 
-    fun loadNote(noteId: Long) {
-        if (loadedNoteId == noteId && _uiState.value.note != null) {
+    fun loadNote(
+        noteId: Long,
+        forceRefresh: Boolean = false
+    ) {
+        if (!forceRefresh && loadedNoteId == noteId && _uiState.value.note != null) {
             return
         }
 

@@ -7,7 +7,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -36,7 +40,9 @@ fun NoteEditScreen(
     }
     Column(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .imePadding()
             .padding(16.dp)
     ) {
         TextButton(
@@ -89,7 +95,7 @@ fun NoteEditScreen(
             label = {
                 Text(text = "Content")
             },
-            minLines = 8,
+            minLines = 6,
             supportingText = {
                 if (uiState.showContentWarning) {
                     Text(text = "Content is empty. The note will contain only a title.")
@@ -97,7 +103,7 @@ fun NoteEditScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .heightIn(min = 180.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))

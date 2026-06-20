@@ -33,6 +33,8 @@ import ua.knu.maksym_pashchenko.notesapp.presentation.notes.view_model.NotesList
 import ua.knu.maksym_pashchenko.notesapp.presentation.notes.view_model.NotesListViewModelFactory
 import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesScreen
 
+private const val NOTE_UPDATED_RESULT = "note_updated_result"
+
 @Composable
 fun NotesNavGraph() {
     val navController = rememberNavController()
@@ -100,6 +102,21 @@ fun NotesNavGraph() {
                         noteDetailsViewModel.loadNote(noteId)
                     }
 
+                    val noteUpdated = backStackEntry.savedStateHandle
+                        .getStateFlow(NOTE_UPDATED_RESULT, false)
+                        .collectAsStateWithLifecycle()
+
+                    LaunchedEffect(noteUpdated.value) {
+                        if (noteUpdated.value) {
+                            noteDetailsViewModel.loadNote(
+                                noteId = noteId,
+                                forceRefresh = true
+                            )
+
+                            backStackEntry.savedStateHandle[NOTE_UPDATED_RESULT] = false
+                        }
+                    }
+
                     val uiState = noteDetailsViewModel.uiState.collectAsStateWithLifecycle()
 
                     NoteDetailsScreen(
@@ -165,6 +182,10 @@ fun NotesNavGraph() {
                     onSaveClick = {
                         noteEditViewModel.saveNote(
                             onSaved = {
+                                navController.previousBackStackEntry
+                                    ?.savedStateHandle
+                                    ?.set(NOTE_UPDATED_RESULT, true)
+
                                 navController.popBackStack()
                             }
                         )
