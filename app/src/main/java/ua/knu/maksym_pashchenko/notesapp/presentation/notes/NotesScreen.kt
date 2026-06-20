@@ -4,20 +4,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ua.knu.maksym_pashchenko.notesapp.presentation.notes.empty_states.EmptyNotesState
+import ua.knu.maksym_pashchenko.notesapp.presentation.notes.empty_states.EmptySearchState
+import ua.knu.maksym_pashchenko.notesapp.presentation.notes.elements.NoteCard
+import ua.knu.maksym_pashchenko.notesapp.presentation.notes.elements.SearchField
+import ua.knu.maksym_pashchenko.notesapp.presentation.notes.elements.SortMenu
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,20 +59,10 @@ fun NotesScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
-
-            OutlinedTextField(
-                value = uiState.searchQuery,
-                onValueChange = onSearchQueryChanged,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-                singleLine = true,
-                label = {
-                    Text("Search")
-                },
-                placeholder = {
-                    Text("Search by title or content")
-                }
+            SearchField(
+                query = uiState.searchQuery,
+                onSearchQueryChanged = onSearchQueryChanged,
+                modifier = Modifier.padding(top = 8.dp)
             )
 
             SortMenu(

@@ -29,8 +29,8 @@ import ua.knu.maksym_pashchenko.notesapp.presentation.details.NoteDetailsViewMod
 import ua.knu.maksym_pashchenko.notesapp.presentation.edit.NoteEditScreen
 import ua.knu.maksym_pashchenko.notesapp.presentation.edit.NoteEditViewModel
 import ua.knu.maksym_pashchenko.notesapp.presentation.edit.NoteEditViewModelFactory
-import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesListViewModel
-import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesListViewModelFactory
+import ua.knu.maksym_pashchenko.notesapp.presentation.notes.view_model.NotesListViewModel
+import ua.knu.maksym_pashchenko.notesapp.presentation.notes.view_model.NotesListViewModelFactory
 import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesScreen
 
 @Composable

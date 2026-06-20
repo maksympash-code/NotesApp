@@ -1,4 +1,4 @@
-package ua.knu.maksym_pashchenko.notesapp.presentation.notes
+package ua.knu.maksym_pashchenko.notesapp.presentation.notes.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import ua.knu.maksym_pashchenko.notesapp.domain.repository.NotesRepository
+import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesListUiState
+import ua.knu.maksym_pashchenko.notesapp.presentation.notes.NotesSortType
 
 class NotesListViewModel (
     private val repository: NotesRepository

@@ -1,4 +1,4 @@
-package ua.knu.maksym_pashchenko.notesapp.presentation.notes
+package ua.knu.maksym_pashchenko.notesapp.presentation.notes.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -1,4 +1,4 @@
-package ua.knu.maksym_pashchenko.notesapp.presentation.notes
+package ua.knu.maksym_pashchenko.notesapp.presentation.notes.empty_states
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun EmptyNotesState(
+fun EmptyStateView(
+    icon: String,
+    title: String,
+    description: String,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -29,14 +32,14 @@ fun EmptyNotesState(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "📝",
+                text = icon,
                 fontSize = 48.sp
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "There are no notes yet",
+                text = title,
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )
@@ -44,7 +47,7 @@ fun EmptyNotesState(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Tap + to create your first one",
+                text = description,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant

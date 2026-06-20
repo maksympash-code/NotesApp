@@ -1,4 +1,4 @@
-package ua.knu.maksym_pashchenko.notesapp.presentation.notes
+package ua.knu.maksym_pashchenko.notesapp.presentation.notes.elements
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
