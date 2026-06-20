@@ -66,10 +66,13 @@ fun NotesNavGraph() {
 
                 val notes = notesListViewModel.notes.collectAsStateWithLifecycle()
                 val searchQuery = notesListViewModel.searchQuery.collectAsStateWithLifecycle()
+                val sortType = notesListViewModel.sortType.collectAsStateWithLifecycle()
 
                 NotesScreen(
                     notes = notes.value,
                     searchQuery = searchQuery.value,
+                    sortType = sortType.value,
+                    onSortTypeChanged = notesListViewModel::onSortTypeChanged,
                     onSearchQueryChanged = notesListViewModel::onSearchQueryChanged,
                     onNoteClick = { noteId ->
                         navController.navigate(Routes.noteDetails(noteId))

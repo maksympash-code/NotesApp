@@ -18,18 +18,48 @@ class NotesListViewModel (
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
+    private val _sortType = MutableStateFlow(NotesSortType.DATE_DESC)
+    val sortType: StateFlow<NotesSortType> = _sortType.asStateFlow()
+
     val notes: StateFlow<List<Note>> = combine(
         repository.getAllNotes(),
-        _searchQuery
-    ) { notes, query ->
+        _searchQuery,
+        _sortType
+    ) { notes, query, sortType ->
         val trimmedQuery = query.trim()
 
-        if (trimmedQuery.isBlank()) {
+        val filteredNotes = if (trimmedQuery.isBlank()) {
             notes
         } else {
             notes.filter { note ->
                 note.title.contains(trimmedQuery, ignoreCase = true) ||
                         note.content.contains(trimmedQuery, ignoreCase = true)
+            }
+        }
+
+        when (sortType) {
+            NotesSortType.DATE_DESC -> {
+                filteredNotes.sortedByDescending { note ->
+                    note.updatedAt
+                }
+            }
+
+            NotesSortType.DATE_ASC -> {
+                filteredNotes.sortedBy { note ->
+                    note.updatedAt
+                }
+            }
+
+            NotesSortType.TITLE_ASC -> {
+                filteredNotes.sortedBy { note ->
+                    note.title.lowercase()
+                }
+            }
+
+            NotesSortType.TITLE_DESC -> {
+                filteredNotes.sortedBy { note ->
+                    note.title.uppercase()
+                }
             }
         }
     }.stateIn(
@@ -40,5 +70,9 @@ class NotesListViewModel (
 
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
+    }
+
+    fun onSortTypeChanged(sortType: NotesSortType) {
+        _sortType.value = sortType
     }
 }

@@ -3,12 +3,16 @@ package ua.knu.maksym_pashchenko.notesapp.presentation.notes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -21,6 +25,8 @@ import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
 fun NotesScreen(
     notes: List<Note>,
     searchQuery: String,
+    sortType: NotesSortType,
+    onSortTypeChanged: (NotesSortType) -> Unit,
     onSearchQueryChanged: (String) -> Unit,
     onNoteClick: (Long) -> Unit,
     onCreateNoteClick: () -> Unit
@@ -56,6 +62,42 @@ fun NotesScreen(
                 Text("Search by title or content")
             }
         )
+
+        Text(
+            text = "Sort by date",
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.padding(top = 12.dp)
+        )
+
+        Row(
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            FilterChip(
+                selected = sortType == NotesSortType.DATE_DESC,
+                onClick = {
+                    onSortTypeChanged(NotesSortType.DATE_DESC)
+                },
+                label = {
+                    Text(
+                        text = "Newest first"
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            FilterChip(
+                selected = sortType == NotesSortType.DATE_ASC,
+                onClick = {
+                    onSortTypeChanged(NotesSortType.DATE_ASC)
+                },
+                label = {
+                    Text(
+                        text = "Oldest first"
+                    )
+                }
+            )
+        }
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
