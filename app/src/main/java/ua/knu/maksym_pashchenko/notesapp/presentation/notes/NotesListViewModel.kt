@@ -5,10 +5,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import ua.knu.maksym_pashchenko.notesapp.domain.model.Note
 import ua.knu.maksym_pashchenko.notesapp.domain.repository.NotesRepository
 
 class NotesListViewModel (
@@ -16,56 +14,58 @@ class NotesListViewModel (
 ): ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
-
     private val _sortType = MutableStateFlow(NotesSortType.DATE_DESC)
-    val sortType: StateFlow<NotesSortType> = _sortType.asStateFlow()
 
-    val notes: StateFlow<List<Note>> = combine(
+    val uiState: StateFlow<NotesListUiState> = combine(
         repository.getAllNotes(),
         _searchQuery,
         _sortType
     ) { notes, query, sortType ->
-        val trimmedQuery = query.trim()
 
-        val filteredNotes = if (trimmedQuery.isBlank()) {
-            notes
-        } else {
-            notes.filter { note ->
-                note.title.contains(trimmedQuery, ignoreCase = true) ||
-                        note.content.contains(trimmedQuery, ignoreCase = true)
-            }
-        }
+        val filteredNotes = notes
+            .filter { note ->
+                query.isBlank() ||
+                        note.title.contains(query, ignoreCase = true) ||
+                        note.content.contains(query, ignoreCase = true)
+            }.let { filtered ->
+                when (sortType) {
+                    NotesSortType.DATE_DESC -> {
+                        filtered.sortedByDescending { note ->
+                            note.updatedAt
+                        }
+                    }
 
-        when (sortType) {
-            NotesSortType.DATE_DESC -> {
-                filteredNotes.sortedByDescending { note ->
-                    note.updatedAt
+                    NotesSortType.DATE_ASC -> {
+                        filtered.sortedBy { note ->
+                            note.updatedAt
+                        }
+                    }
+
+                    NotesSortType.TITLE_ASC -> {
+                        filtered.sortedBy { note ->
+                            note.title.lowercase()
+                        }
+                    }
+
+                    NotesSortType.TITLE_DESC -> {
+                        filtered.sortedByDescending { note ->
+                            note.title.lowercase()
+                        }
+                    }
                 }
             }
 
-            NotesSortType.DATE_ASC -> {
-                filteredNotes.sortedBy { note ->
-                    note.updatedAt
-                }
-            }
+        NotesListUiState(
+            notes = filteredNotes,
+            searchQuery = query,
+            sortType = sortType,
+            allNotesCount = notes.size
+        )
 
-            NotesSortType.TITLE_ASC -> {
-                filteredNotes.sortedBy { note ->
-                    note.title.lowercase()
-                }
-            }
-
-            NotesSortType.TITLE_DESC -> {
-                filteredNotes.sortedByDescending { note ->
-                    note.title.lowercase()
-                }
-            }
-        }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = emptyList()
+        initialValue = NotesListUiState()
     )
 
     fun onSearchQueryChanged(query: String) {

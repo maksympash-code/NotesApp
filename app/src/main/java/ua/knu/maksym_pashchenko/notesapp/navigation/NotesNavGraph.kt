@@ -8,6 +8,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -64,20 +65,16 @@ fun NotesNavGraph() {
                     factory = NotesListViewModelFactory(repository)
                 )
 
-                val notes = notesListViewModel.notes.collectAsStateWithLifecycle()
-                val searchQuery = notesListViewModel.searchQuery.collectAsStateWithLifecycle()
-                val sortType = notesListViewModel.sortType.collectAsStateWithLifecycle()
+                val uiState by notesListViewModel.uiState.collectAsStateWithLifecycle()
 
                 NotesScreen(
-                    notes = notes.value,
-                    searchQuery = searchQuery.value,
-                    sortType = sortType.value,
+                    uiState = uiState,
                     onSortTypeChanged = notesListViewModel::onSortTypeChanged,
                     onSearchQueryChanged = notesListViewModel::onSearchQueryChanged,
                     onNoteClick = { noteId ->
                         navController.navigate(Routes.noteDetails(noteId))
                     },
-                    onCreateNoteClick = {
+                    onAddNoteClick = {
                         navController.navigate(Routes.noteEdit())
                     }
                 )
