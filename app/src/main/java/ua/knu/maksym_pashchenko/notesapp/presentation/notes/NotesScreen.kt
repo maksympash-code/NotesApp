@@ -1,10 +1,8 @@
 package ua.knu.maksym_pashchenko.notesapp.presentation.notes
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,7 +28,7 @@ fun NotesScreen(
     onSearchQueryChanged: (String) -> Unit,
     onSortTypeChanged: (NotesSortType) -> Unit,
     onNoteClick: (Long) -> Unit,
-    onAddNoteClick: () -> Unit
+    onAddNoteClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -54,59 +52,63 @@ fun NotesScreen(
         },
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
+            contentPadding = PaddingValues(
+                top = 8.dp,
+                bottom = 88.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            SearchField(
-                query = uiState.searchQuery,
-                onSearchQueryChanged = onSearchQueryChanged,
-                modifier = Modifier.padding(top = 8.dp)
-            )
+            item {
+                SearchField(
+                    query = uiState.searchQuery,
+                    onSearchQueryChanged = onSearchQueryChanged,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
 
-            SortMenu(
-                selectedSortType = uiState.sortType,
-                onSortTypeChanged = onSortTypeChanged
-            )
+
+            item {
+                SortMenu(
+                    selectedSortType = uiState.sortType,
+                    onSortTypeChanged = onSortTypeChanged
+                )
+            }
 
             when {
                 uiState.allNotesCount == 0 -> {
-                    EmptyNotesState(
-                        modifier = Modifier.weight(1f)
-                    )
+                    item {
+                        EmptyNotesState(
+                            modifier = Modifier.fillParentMaxHeight(0.7f)
+                        )
+                    }
                 }
 
                 uiState.notes.isEmpty() -> {
-                    EmptySearchState(
-                        query = uiState.searchQuery,
-                        modifier = Modifier.weight(1f)
-                    )
+                    item {
+                        EmptySearchState(
+                            query = uiState.searchQuery,
+                            modifier = Modifier.fillParentMaxHeight(0.7f)
+                        )
+                    }
+
                 }
 
                 else -> {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        contentPadding = PaddingValues(
-                            top = 16.dp,
-                            bottom = 88.dp
-                        ),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        items(
-                            items = uiState.notes,
-                            key = { note -> note.id }
-                        ) { note ->
-                            NoteCard(
-                                note = note,
-                                onClick = { clickedNote ->
-                                    onNoteClick(clickedNote.id)
-                                }
-                            )
-                        }
+                    items(
+                        items = uiState.notes,
+                        key = { note -> note.id }
+                    ) { note ->
+                        NoteCard(
+                            note = note,
+                            onClick = { clickedNote ->
+                                onNoteClick(clickedNote.id)
+                            }
+                        )
                     }
                 }
             }
